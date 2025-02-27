@@ -85,5 +85,28 @@ def main():
                     score += 1
             st.write(f"✅ Your Score: {score}/{len(questions)}")
     
+    elif choice == 'Symptoms':
+        st.title("Symptoms of PCOS")
+        st.write("- Irregular menstrual cycles")
+        st.write("- Excessive hair growth (hirsutism)")
+        st.write("- Acne and oily skin")
+        st.write("- Weight gain and difficulty losing weight")
+        st.write("- Thinning hair or hair loss on the scalp")
+    
+    elif choice == 'Causes':
+        st.title("Causes of PCOS")
+        st.write("- Insulin resistance")
+        st.write("- Excess androgen production")
+        st.write("- Genetic factors")
+        st.write("- Chronic inflammation")
+    
+    elif choice == 'Preventive Measures':
+        st.title("Preventive Measures for PCOS")
+        st.write("- Maintain a healthy diet rich in whole foods and low in processed sugars")
+        st.write("- Engage in regular physical activity")
+        st.write("- Manage stress through mindfulness and relaxation techniques")
+        st.write("- Get adequate sleep and maintain a consistent sleep schedule")
+        st.write("- Consult a healthcare professional for early detection and management")
+    
 if __name__ == "__main__":
     main()
