@@ -59,6 +59,10 @@ elif page == "Data Visualization":
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
         
+        # Clean BMI column
+        df['BMI'] = pd.to_numeric(df['BMI'], errors='coerce')  # Convert invalid values to NaN
+        df = df.dropna(subset=['BMI'])  # Drop rows where BMI is NaN
+
         st.subheader("Distribution of PCOS Cases")
         fig, ax = plt.subplots()
         sns.countplot(x='PCOS (Y/N)', data=df, ax=ax)
