@@ -30,12 +30,14 @@ def main():
                 ("Which lifestyle change can help manage PCOS symptoms?", ["Eating more sugar", "Exercising regularly", "Skipping meals", "Sleeping less"], "Exercising regularly")
             ]
             score = 0
-            for q, options, answer in questions:
-                user_answer = st.radio(q, options)
-                if user_answer == answer:
-                    score += 1
-                st.write(f"✅ Correct Answer: {answer}")
+            user_answers = {}
+            for i, (q, options, answer) in enumerate(questions):
+                user_answers[i] = st.radio(q, options, key=f"mcq_{i}")
             if st.button("Submit Answers"):
+                for i, (_, _, answer) in enumerate(questions):
+                    st.write(f"✅ Correct Answer: {answer}")
+                    if user_answers[i] == answer:
+                        score += 1
                 st.write(f"✅ Your Score: {score}/{len(questions)}")
         
         elif game_choice == "Match the Symptoms":
@@ -44,12 +46,14 @@ def main():
             shuffled_keys = list(symptoms.keys())
             random.shuffle(shuffled_keys)
             score = 0
+            user_answers = {}
             for symptom in shuffled_keys:
-                answer = st.selectbox(f"Match: {symptom}", ["Hormonal Imbalance", "Androgen Excess", "Insulin Resistance", "Other"])
-                if answer == symptoms[symptom]:
-                    score += 1
-                st.write(f"✅ Correct Answer: {symptoms[symptom]}")
+                user_answers[symptom] = st.selectbox(f"Match: {symptom}", ["Hormonal Imbalance", "Androgen Excess", "Insulin Resistance", "Other"], key=symptom)
             if st.button("Submit Matches"):
+                for symptom in shuffled_keys:
+                    st.write(f"✅ Correct Answer: {symptoms[symptom]}")
+                    if user_answers[symptom] == symptoms[symptom]:
+                        score += 1
                 st.write(f"✅ Your Score: {score}/{len(symptoms)}")
         
         elif game_choice == "Bubble Selection":
@@ -59,8 +63,8 @@ def main():
             selected = st.multiselect("Choose the correct options:", options)
             if st.button("Submit Selections"):
                 score = len(set(selected) & correct_answers)
-                st.write(f"✅ Your Score: {score}/{len(correct_answers)}")
                 st.write(f"✅ Correct Answers: {', '.join(correct_answers)}")
+                st.write(f"✅ Your Score: {score}/{len(correct_answers)}")
     
     elif choice == 'Quiz':
         st.title("PCOS Knowledge Quiz")
@@ -70,13 +74,15 @@ def main():
             ("Which hormone is primarily responsible for insulin resistance in PCOS?", ["Cortisol", "Insulin", "Estrogen", "Androgens"], "Androgens", "Elevated androgens contribute to insulin resistance, a key feature of PCOS.")
         ]
         score = 0
-        for q, options, answer, explanation in questions:
-            user_answer = st.radio(q, options)
-            if user_answer == answer:
-                score += 1
-            st.write(f"✅ Correct Answer: {answer}")
-            st.write(f"ℹ️ Explanation: {explanation}")
+        user_answers = {}
+        for i, (q, options, answer, explanation) in enumerate(questions):
+            user_answers[i] = st.radio(q, options, key=f"quiz_{i}")
         if st.button("Submit Quiz"):
+            for i, (_, _, answer, explanation) in enumerate(questions):
+                st.write(f"✅ Correct Answer: {answer}")
+                st.write(f"ℹ️ Explanation: {explanation}")
+                if user_answers[i] == answer:
+                    score += 1
             st.write(f"✅ Your Score: {score}/{len(questions)}")
     
 if __name__ == "__main__":
