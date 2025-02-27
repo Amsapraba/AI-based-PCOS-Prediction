@@ -119,4 +119,24 @@ elif page == "PCOS Prediction":
         st.subheader("Model Performance")
         st.write(f"Accuracy: {accuracy * 100:.2f}%")
         st.text("Classification Report:")
-        st.text(classification_report(y_test, y_pred))
+        report = classification_report(y_test, y_pred)
+        st.text(report)
+        
+        st.subheader("Understanding the Metrics")
+        st.markdown("**Precision:** Measures how many predicted positive cases were actually correct.")
+        st.markdown("- Class 0 (No PCOS): High precision means most predicted 'No PCOS' cases were correct.")
+        st.markdown("- Class 1 (PCOS): Lower precision means some predicted 'PCOS' cases were incorrect.")
+        
+        st.markdown("**Recall:** Measures how many actual positive cases were correctly predicted.")
+        st.markdown("- Class 0 (No PCOS): High recall means most 'No PCOS' cases were detected correctly.")
+        st.markdown("- Class 1 (PCOS): Lower recall means some PCOS cases were missed.")
+        
+        st.markdown("**F1-Score:** Balances precision and recall, higher is better.")
+        
+        st.markdown("**Support:** Number of actual samples per class.")
+        
+        st.subheader("Possible Improvements")
+        st.markdown("- Balance the dataset using resampling techniques.")
+        st.markdown("- Try different models like SVM, XGBoost, or Neural Networks.")
+        st.markdown("- Improve feature selection for better accuracy.")
+        st.markdown("- Use hyperparameter tuning to optimize the model.")
