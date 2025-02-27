@@ -10,7 +10,11 @@ def main():
     # Page Layouts
     if choice == 'Home':
         st.title("Welcome to PCOS Prediction Dashboard")
-        st.write("Explore various features related to PCOS awareness and prevention.")
+        st.write("🌸 Empower yourself with knowledge about PCOS and take control of your health.")
+        st.write("🔍 Explore insightful resources, interactive tools, and expert guidance.")
+        st.write("🎯 Our mission is to spread awareness and provide actionable insights.")
+        st.write("💡 Stay informed, stay healthy, and embrace a proactive approach to well-being.")
+        st.write("🚀 Let's embark on this journey towards better health together!")
     
     elif choice == 'Games':
         st.title("PCOS Awareness Games")
