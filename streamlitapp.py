@@ -3,7 +3,10 @@ import streamlit as st
 st.set_page_config(page_title="PCOS ML Game", page_icon="✨", layout="centered")
 
 # Page selection
-page = st.sidebar.radio("Navigation", ["🏠 Home", "📖 What is PCOS?"])
+if "page" not in st.session_state:
+    st.session_state["page"] = "🏠 Home"
+
+page = st.session_state["page"]
 
 if page == "🏠 Home":
     st.title("🎮 Welcome to Our ML Game!")
@@ -13,7 +16,8 @@ if page == "🏠 Home":
     )
     if st.button("👉 Learn More"):
         st.session_state["page"] = "📖 What is PCOS?"
-        st.experimental_rerun()
+        st.experimental_set_query_params(page="pcos")
+        st.rerun()
 
 elif page == "📖 What is PCOS?":
     st.title("📖 What is PCOS?")
@@ -25,4 +29,5 @@ elif page == "📖 What is PCOS?":
     )
     if st.button("🔙 Back to Home"):
         st.session_state["page"] = "🏠 Home"
-        st.experimental_rerun()
+        st.experimental_set_query_params(page="home")
+        st.rerun()
