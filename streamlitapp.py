@@ -17,107 +17,35 @@ def main():
         st.write("💡 Stay informed, stay healthy, and embrace a proactive approach to well-being.")
         st.write("🚀 Let's embark on this journey towards better health together!")
     
-    elif choice == 'Games':
-        st.title("PCOS Awareness Games")
-        game_choice = st.radio("Choose a game:", ["PCOS Trivia", "Puzzle Challenge", "Find the Myth"])
-        
-        if game_choice == "PCOS Trivia":
-            st.subheader("PCOS Trivia - Answer the MCQs")
-            questions = {
-                "What is a common symptom of PCOS?": ["Irregular periods", "Low blood pressure", "Increased vision", "Stronger bones"],
-                "Which hormone is often elevated in PCOS?": ["Insulin", "Testosterone", "Estrogen", "Melatonin"],
-                "What lifestyle change can help manage PCOS?": ["Exercise", "Skipping meals", "Ignoring symptoms", "Sleeping less"]
-            }
-            score = 0
-            for q, options in questions.items():
-                answer = st.radio(q, options)
-                if answer == options[0]:
-                    score += 1
-            if st.button("Submit Answers"):
-                if score >= 2:
-                    st.success(f"Great job! You scored {score}/3 and won 10 points!")
-                else:
-                    st.error(f"Keep learning! You scored {score}/3. Try again!")
-        
-        elif game_choice == "Puzzle Challenge":
-            st.subheader("Match the Correct Terms")
-            pairs = {"PCOS": "Hormonal disorder", "Insulin Resistance": "Can lead to diabetes", "Exercise": "Helps in PCOS management"}
-            score = 0
-            for key in pairs:
-                match = st.selectbox(f"{key} is related to:", ["Hormonal disorder", "Can lead to diabetes", "Helps in PCOS management", "Unrelated"])
-                if match == pairs[key]:
-                    score += 1
-            if st.button("Check Answers"):
-                if score >= 2:
-                    st.success(f"Awesome! You scored {score}/3 and won 10 points!")
-                else:
-                    st.error(f"Try again! You scored {score}/3.")
-        
-        elif game_choice == "Find the Myth":
-            st.subheader("Spot the Myth - Select the incorrect statement")
-            myths = {
-                "PCOS is curable": False,
-                "Only overweight women get PCOS": False,
-                "PCOS can affect fertility": True,
-                "PCOS is always caused by genetics": False
-            }
-            score = 0
-            for statement, truth in myths.items():
-                selection = st.radio(f"{statement}", ["True", "False"])
-                if (selection == "False" and not truth) or (selection == "True" and truth):
-                    score += 1
-            if st.button("Submit"):
-                if score >= 3:
-                    st.success(f"You're a myth buster! You scored {score}/4 and won 10 points!")
-                else:
-                    st.error(f"Almost there! You scored {score}/4. Try again!")
-    
-    elif choice == 'Quiz':
-        st.title("PCOS Health Quiz")
-        st.write("Take a quiz to assess your knowledge and awareness about PCOS.")
-        
-        quiz_questions = {
-            "What is PCOS caused by?": ["Hormonal imbalance", "Bacterial infection", "Vitamin deficiency", "Excess hydration"],
-            "Which symptom is NOT commonly linked to PCOS?": ["Frequent colds", "Irregular periods", "Weight gain", "Acne"],
-            "What is a recommended dietary approach for managing PCOS?": ["Low sugar, high fiber", "High sugar, low fiber", "Only liquid diet", "No carbohydrates"],
-            "Which organ is primarily affected by PCOS?": ["Ovaries", "Liver", "Heart", "Lungs"]
-        }
-        
-        quiz_score = 0
-        for q, options in quiz_questions.items():
-            answer = st.radio(q, options)
-            if answer == options[0]:
-                quiz_score += 1
-        
-        if st.button("Submit Quiz"):
-            if quiz_score >= 3:
-                st.success(f"Excellent! You scored {quiz_score}/4. Keep up the good work!")
-            else:
-                st.warning(f"You scored {quiz_score}/4. Keep learning and try again!")
-    
-    elif choice == 'Health Condition':
-        st.title("Check Your Health Condition")
-        st.write("Understand your health status based on different parameters.")
-        
-        st.subheader("Monitor Your Health")
-        st.write("🔹 Track your menstrual cycle and note any irregularities.")
-        st.write("🔹 Keep an eye on weight changes and BMI fluctuations.")
-        st.write("🔹 Monitor blood sugar levels, as insulin resistance is common in PCOS.")
-        st.write("🔹 Observe symptoms like acne, hair growth, and mood swings.")
-        st.write("🔹 Regularly check hormone levels with medical tests.")
-        st.write("📌 Consult a healthcare professional if you notice persistent issues.")
-    
     elif choice == 'Symptoms':
         st.title("PCOS Symptoms")
-        st.write("Learn about the common symptoms of PCOS and their impact.")
+        st.write("⚠️ Common symptoms of PCOS include:")
+        st.markdown("- ❌ Irregular or absent menstrual cycles")
+        st.markdown("- 🌱 Excessive hair growth (hirsutism)")
+        st.markdown("- 🎭 Acne and oily skin")
+        st.markdown("- ⚖️ Unexplained weight gain")
+        st.markdown("- 💤 Fatigue and sleep disturbances")
+        st.markdown("- 🧑‍⚕️ Difficulty in conceiving (infertility)")
+        st.markdown("- 📉 Thinning hair or hair loss on the scalp")
     
     elif choice == 'Causes':
         st.title("Causes of PCOS")
-        st.write("Explore the potential causes and risk factors of PCOS.")
+        st.write("🔍 Potential causes and risk factors of PCOS:")
+        st.markdown("- ⚙️ **Hormonal Imbalance**: Increased androgens leading to irregular ovulation")
+        st.markdown("- 🧬 **Genetics**: Family history of PCOS or hormonal disorders")
+        st.markdown("- 🍩 **Insulin Resistance**: High insulin levels contribute to weight gain and hormonal disruptions")
+        st.markdown("- 🍕 **Unhealthy Diet & Lifestyle**: Poor nutrition, lack of exercise, and obesity increase risks")
+        st.markdown("- 💊 **Inflammation**: Chronic low-grade inflammation can exacerbate PCOS symptoms")
     
     elif choice == 'Preventive Measures':
         st.title("Preventive Measures")
-        st.write("Find out how to reduce the risk of PCOS through lifestyle changes.")
+        st.write("✅ Ways to reduce the risk and manage PCOS effectively:")
+        st.markdown("- 🥗 **Healthy Diet**: Eat a balanced diet rich in fiber, protein, and healthy fats")
+        st.markdown("- 🏃 **Regular Exercise**: Engage in physical activities like walking, yoga, or strength training")
+        st.markdown("- 🛌 **Adequate Sleep**: Maintain a consistent sleep schedule to regulate hormones")
+        st.markdown("- 🏥 **Regular Checkups**: Consult a doctor for hormone tests and health assessments")
+        st.markdown("- 🚫 **Reduce Stress**: Practice mindfulness, meditation, and relaxation techniques")
+        st.markdown("- 🍬 **Limit Sugar Intake**: Control blood sugar levels to manage insulin resistance")
     
 if __name__ == "__main__":
     main()
