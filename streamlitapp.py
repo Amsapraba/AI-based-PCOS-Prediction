@@ -13,6 +13,10 @@ st.set_page_config(page_title="PCOS Prediction", layout="wide")
 # Sidebar Navigation
 menu = st.sidebar.radio("Navigation", ["Home", "Upload Data", "Visualize Data", "Predict PCOS"])
 
+def clean_column_names(df):
+    df.columns = df.columns.str.strip().str.replace(" ", "_").str.replace("/", "_")
+    return df
+
 if menu == "Home":
     st.title("Welcome to AI-Based PCOS Risk Prediction")
     st.write("This application helps in predicting the risk of PCOS based on crucial health parameters. Upload your dataset to get started!")
@@ -23,6 +27,7 @@ elif menu == "Upload Data":
     
     if uploaded_file:
         df = pd.read_csv(uploaded_file)
+        df = clean_column_names(df)
         st.write("Dataset Loaded Successfully!")
         st.dataframe(df.head())
         df.to_csv("pcos_data.csv", index=False)  # Save uploaded data
@@ -33,17 +38,18 @@ elif menu == "Visualize Data":
     # Load dataset
     try:
         df = pd.read_csv("pcos_data.csv")
+        df = clean_column_names(df)
         st.write("Showing crucial PCOS-related features:")
-        features = ["Age (yrs)", "BMI", "Cycle length(days)", "FSH(mIU/mL)", "LH(mIU/mL)", "AMH(ng/mL)",
-                    "TSH (mIU/L)", "Follicle No. (L)", "Follicle No. (R)", "Avg. F size (L) (mm)", "Avg. F size (R) (mm)",
-                    "Endometrium (mm)", "Weight gain(Y/N)", "hair growth(Y/N)", "Skin darkening (Y/N)",
-                    "Hair loss(Y/N)", "Pimples(Y/N)", "Fast food (Y/N)", "Reg.Exercise(Y/N)"]
-        df = df[features + ["PCOS (Y/N)"]]
+        features = ["Age_yrs", "BMI", "Cycle_length_days", "FSH_mIU_mL", "LH_mIU_mL", "AMH_ng_mL",
+                    "TSH_mIU_L", "Follicle_No_L", "Follicle_No_R", "Avg_F_size_L_mm", "Avg_F_size_R_mm",
+                    "Endometrium_mm", "Weight_gain_Y_N", "hair_growth_Y_N", "Skin_darkening_Y_N",
+                    "Hair_loss_Y_N", "Pimples_Y_N", "Fast_food_Y_N", "Reg_Exercise_Y_N"]
+        df = df[features + ["PCOS_Y_N"]]
         
         # Barplot
         st.subheader("Bar Plot of PCOS Cases")
         fig, ax = plt.subplots()
-        sns.countplot(data=df, x="PCOS (Y/N)", palette="coolwarm", ax=ax)
+        sns.countplot(data=df, x="PCOS_Y_N", palette="coolwarm", ax=ax)
         st.pyplot(fig)
         
         # Histograms
@@ -55,7 +61,7 @@ elif menu == "Visualize Data":
         
         # Pie Chart
         st.subheader("Pie Chart for Lifestyle Factors")
-        pie_feature = st.selectbox("Select a feature for pie chart", ["Weight gain(Y/N)", "hair growth(Y/N)", "Skin darkening (Y/N)", "Hair loss(Y/N)", "Pimples(Y/N)"])
+        pie_feature = st.selectbox("Select a feature for pie chart", ["Weight_gain_Y_N", "hair_growth_Y_N", "Skin_darkening_Y_N", "Hair_loss_Y_N", "Pimples_Y_N"])
         fig, ax = plt.subplots()
         df[pie_feature].value_counts().plot.pie(autopct="%.1f%%", ax=ax)
         st.pyplot(fig)
@@ -69,13 +75,14 @@ elif menu == "Predict PCOS":
     # Load and train model
     try:
         df = pd.read_csv("pcos_data.csv")
-        features = ["Age (yrs)", "BMI", "Cycle length(days)", "FSH(mIU/mL)", "LH(mIU/mL)", "AMH(ng/mL)",
-                    "TSH (mIU/L)", "Follicle No. (L)", "Follicle No. (R)", "Avg. F size (L) (mm)", "Avg. F size (R) (mm)",
-                    "Endometrium (mm)", "Weight gain(Y/N)", "hair growth(Y/N)", "Skin darkening (Y/N)",
-                    "Hair loss(Y/N)", "Pimples(Y/N)", "Fast food (Y/N)", "Reg.Exercise(Y/N)"]
+        df = clean_column_names(df)
+        features = ["Age_yrs", "BMI", "Cycle_length_days", "FSH_mIU_mL", "LH_mIU_mL", "AMH_ng_mL",
+                    "TSH_mIU_L", "Follicle_No_L", "Follicle_No_R", "Avg_F_size_L_mm", "Avg_F_size_R_mm",
+                    "Endometrium_mm", "Weight_gain_Y_N", "hair_growth_Y_N", "Skin_darkening_Y_N",
+                    "Hair_loss_Y_N", "Pimples_Y_N", "Fast_food_Y_N", "Reg_Exercise_Y_N"]
         
         X = df[features]
-        y = df["PCOS (Y/N)"]
+        y = df["PCOS_Y_N"]
         
         # Data Preprocessing
         scaler = StandardScaler()
@@ -109,4 +116,3 @@ elif menu == "Predict PCOS":
             st.success(f"Prediction Result: {result}")
         except:
             st.error("Model not found. Please train the model first!")
-
