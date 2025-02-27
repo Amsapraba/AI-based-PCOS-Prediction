@@ -1,33 +1,26 @@
 import streamlit as st
 
-st.set_page_config(page_title="PCOS ML Game", page_icon="✨", layout="centered")
+st.set_page_config(page_title="PCOS ML Game", page_icon="✨", layout="wide")
 
-# Page selection
-if "page" not in st.session_state:
-    st.session_state["page"] = "🏠 Home"
-
-page = st.session_state["page"]
+# Sidebar Navigation
+st.sidebar.title("Navigation")
+page = st.sidebar.radio("Go to", ["🏠 Home", "📖 What is PCOS?"])
 
 if page == "🏠 Home":
-    st.title("🎮 Welcome to Our ML Game!")
+    st.title("🎮 Welcome to Our PCOS ML Game!")
     st.markdown(
-        "- 🌟 **Experience an innovative, gamified approach to explore and learn about PCOS.**\n"
-        "- 💡 **Engage with our interactive model and uncover insights in a fun way!**"
+        "- 🚀 **Explore PCOS in a fun and interactive way!**\n"
+        "- 🧠 **Engage with our AI model and gain insights.**\n"
+        "- 🎯 **Make learning about PCOS an exciting experience!**"
     )
-    if st.button("👉 Learn More"):
-        st.session_state["page"] = "📖 What is PCOS?"
-        st.experimental_set_query_params(page="pcos")
-        st.rerun()
-
+    st.image("https://source.unsplash.com/800x400/?health,technology", caption="An Innovative Approach to Health Awareness", use_column_width=True)
+    
 elif page == "📖 What is PCOS?":
     st.title("📖 What is PCOS?")
     st.markdown(
-        "- 📢 **Polycystic Ovary Syndrome (PCOS) is a hormonal disorder common among women.**\n"
-        "- ⚠️ **Causes irregular periods, excessive androgen levels, and polycystic ovaries.**\n"
-        "- 🎯 **May lead to metabolic issues, weight gain, and increased diabetes risk.**\n"
-        "- 🏥 **Early diagnosis and management can help in treatment.**"
+        "- 📢 **Polycystic Ovary Syndrome (PCOS) is a common hormonal disorder in women.**\n"
+        "- ⚠️ **Leads to irregular periods, excessive androgen levels, and ovarian cysts.**\n"
+        "- 🎯 **Can cause metabolic issues, weight gain, and increased diabetes risk.**\n"
+        "- 🏥 **Early diagnosis and management are crucial.**"
     )
-    if st.button("🔙 Back to Home"):
-        st.session_state["page"] = "🏠 Home"
-        st.experimental_set_query_params(page="home")
-        st.rerun()
+    st.image("https://source.unsplash.com/800x400/?health,women", caption="Understanding PCOS", use_column_width=True)
