@@ -17,6 +17,58 @@ def main():
         st.write("💡 Stay informed, stay healthy, and embrace a proactive approach to well-being.")
         st.write("🚀 Let's embark on this journey towards better health together!")
     
+    elif choice == 'Games':
+        st.title("Interactive Games")
+        st.write("🎮 Engage with fun and educational games to test your knowledge about PCOS.")
+        
+        game_choice = st.selectbox("Choose a Game", ["MCQ Challenge", "Match the Symptoms", "Bubble Selection"])
+        
+        if game_choice == "MCQ Challenge":
+            st.write("📝 Answer the multiple-choice questions correctly to earn points!")
+            questions = [
+                ("What hormone is typically elevated in PCOS?", ["Estrogen", "Progesterone", "Testosterone", "Insulin"], "Testosterone"),
+                ("Which lifestyle change can help manage PCOS symptoms?", ["Eating more sugar", "Exercising regularly", "Skipping meals", "Sleeping less"], "Exercising regularly")
+            ]
+            score = 0
+            for q, options, answer in questions:
+                user_answer = st.radio(q, options)
+                if user_answer == answer:
+                    score += 1
+            if st.button("Submit Answers"):
+                st.write(f"✅ Your Score: {score}/{len(questions)}")
+        
+        elif game_choice == "Match the Symptoms":
+            st.write("🧩 Drag and drop the correct symptoms into their categories!")
+            st.write("(Feature coming soon!)")
+        
+        elif game_choice == "Bubble Selection":
+            st.write("🎈 Select the correct bubbles related to PCOS management!")
+            st.write("(Feature coming soon!)")
+    
+    elif choice == 'Quiz':
+        st.title("PCOS Knowledge Quiz")
+        st.write("🧠 Test your knowledge about PCOS and gain awareness.")
+        questions = [
+            ("What is a common symptom of PCOS?", ["High energy levels", "Irregular periods", "Low blood pressure", "Hair thinning"], "Irregular periods"),
+            ("Which hormone is primarily responsible for insulin resistance in PCOS?", ["Cortisol", "Insulin", "Estrogen", "Androgens"], "Androgens")
+        ]
+        score = 0
+        for q, options, answer in questions:
+            user_answer = st.radio(q, options)
+            if user_answer == answer:
+                score += 1
+        if st.button("Submit Quiz"):
+            st.write(f"✅ Your Score: {score}/{len(questions)}")
+    
+    elif choice == 'Health Condition':
+        st.title("Monitor Your Health Condition")
+        st.write("📊 Track these parameters to monitor your health:")
+        st.markdown("- 📅 **Menstrual Cycle**: Keep a log of your periods to identify irregularities.")
+        st.markdown("- ⚖️ **Weight & BMI**: Maintain a healthy weight to regulate hormones.")
+        st.markdown("- 🍽️ **Diet & Sugar Levels**: Monitor blood sugar levels to prevent insulin resistance.")
+        st.markdown("- 🩸 **Hormone Levels**: Get tested for testosterone, insulin, and other key hormones.")
+        st.markdown("- 🏃 **Exercise Routine**: Stay physically active to improve metabolism and hormonal balance.")
+    
     elif choice == 'Symptoms':
         st.title("PCOS Symptoms")
         st.write("⚠️ Common symptoms of PCOS include:")
