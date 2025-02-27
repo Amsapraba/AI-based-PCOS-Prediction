@@ -3,17 +3,15 @@ import streamlit as st
 def main():
     st.set_page_config(page_title='PCOS Prediction Dashboard', layout='wide')
     
-    # Title and Team Information
-    st.title("AI-based Early Detection and Prediction of Poly Cystic Ovary Syndrome (PCOS)")
-    st.write("### Amsapraba A P (Team Leader), Akshaya A, Kanaga Durga E, Srimathi P, Sam V George (MENTOR)")
-    st.write("#### St. Joseph’s College of Engineering, Chennai.")
-    st.write("**Team Code: S179**")
-    
     # Sidebar Navigation
     menu = ['Home', 'Symptoms', 'Causes', 'Preventive Measures', 'Health Condition', 'Quiz', 'Games']
     choice = st.sidebar.radio("Navigation", menu)
     
     if choice == 'Home':
+        st.title("AI-based Early Detection and Prediction of Poly Cystic Ovary Syndrome (PCOS)")
+        st.write("### Amsapraba A P (Team Leader), Akshaya A, Kanaga Durga E, Srimathi P, Sam V George (MENTOR)")
+        st.write("#### St. Joseph’s College of Engineering, Chennai.")
+        st.write("**Team Code: S179**")
         st.subheader("Welcome to the PCOS Prediction Dashboard")
         st.write("🔍 Explore insights and tools for early detection and management of PCOS.")
         st.write("📊 Utilize AI-driven predictions for proactive healthcare decisions.")
