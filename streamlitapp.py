@@ -98,6 +98,14 @@ def main():
     elif choice == 'Health Condition':
         st.title("Check Your Health Condition")
         st.write("Understand your health status based on different parameters.")
+        
+        st.subheader("Monitor Your Health")
+        st.write("🔹 Track your menstrual cycle and note any irregularities.")
+        st.write("🔹 Keep an eye on weight changes and BMI fluctuations.")
+        st.write("🔹 Monitor blood sugar levels, as insulin resistance is common in PCOS.")
+        st.write("🔹 Observe symptoms like acne, hair growth, and mood swings.")
+        st.write("🔹 Regularly check hormone levels with medical tests.")
+        st.write("📌 Consult a healthcare professional if you notice persistent issues.")
     
     elif choice == 'Symptoms':
         st.title("PCOS Symptoms")
