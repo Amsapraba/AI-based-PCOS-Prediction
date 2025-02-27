@@ -1,8 +1,9 @@
 import streamlit as st
+import pandas as pd
 
 st.set_page_config(page_title="PCOS ML Game", page_icon="✨")
 
-page = st.sidebar.radio("Navigation", ["Home", "What is PCOS?"])
+page = st.sidebar.radio("Navigation", ["Home", "What is PCOS?", "PCOS Dataset"])
 
 if page == "Home":
     st.title("Welcome to Our PCOS ML Game!")
@@ -38,3 +39,14 @@ elif page == "What is PCOS?":
     st.markdown("- Managing stress levels")
     st.markdown("- Consulting a healthcare provider for medical treatments")
     st.markdown("- Monitoring weight and hormone levels")
+
+elif page == "PCOS Dataset":
+    st.title("PCOS Dataset")
+    st.write("Here is the complete dataset used for analysis.")
+    
+    file_path = "/mnt/data/PCOS_data.csv"
+    try:
+        df = pd.read_csv(file_path)
+        st.dataframe(df)
+    except Exception as e:
+        st.error(f"Error loading dataset: {e}")
