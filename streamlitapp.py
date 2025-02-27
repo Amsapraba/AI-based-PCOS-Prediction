@@ -75,5 +75,8 @@ elif page == "Data Visualization":
         
         st.subheader("Correlation Heatmap")
         fig, ax = plt.subplots(figsize=(10,6))
-        sns.heatmap(df.corr(), annot=False, cmap='coolwarm', ax=ax)
+        
+        # Select only numeric columns for correlation
+        numeric_df = df.select_dtypes(include=['number']).dropna()
+        sns.heatmap(numeric_df.corr(), annot=False, cmap='coolwarm', ax=ax)
         st.pyplot(fig)
