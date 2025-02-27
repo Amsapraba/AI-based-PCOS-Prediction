@@ -75,6 +75,25 @@ def main():
     elif choice == 'Quiz':
         st.title("PCOS Health Quiz")
         st.write("Take a quiz to assess your knowledge and awareness about PCOS.")
+        
+        quiz_questions = {
+            "What is PCOS caused by?": ["Hormonal imbalance", "Bacterial infection", "Vitamin deficiency", "Excess hydration"],
+            "Which symptom is NOT commonly linked to PCOS?": ["Frequent colds", "Irregular periods", "Weight gain", "Acne"],
+            "What is a recommended dietary approach for managing PCOS?": ["Low sugar, high fiber", "High sugar, low fiber", "Only liquid diet", "No carbohydrates"],
+            "Which organ is primarily affected by PCOS?": ["Ovaries", "Liver", "Heart", "Lungs"]
+        }
+        
+        quiz_score = 0
+        for q, options in quiz_questions.items():
+            answer = st.radio(q, options)
+            if answer == options[0]:
+                quiz_score += 1
+        
+        if st.button("Submit Quiz"):
+            if quiz_score >= 3:
+                st.success(f"Excellent! You scored {quiz_score}/4. Keep up the good work!")
+            else:
+                st.warning(f"You scored {quiz_score}/4. Keep learning and try again!")
     
     elif choice == 'Health Condition':
         st.title("Check Your Health Condition")
