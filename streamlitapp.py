@@ -38,12 +38,26 @@ def main():
                 st.write(f"✅ Your Score: {score}/{len(questions)}")
         
         elif game_choice == "Match the Symptoms":
-            st.write("🧩 Drag and drop the correct symptoms into their categories!")
-            st.write("(Feature coming soon!)")
+            st.write("🧩 Match the symptoms with the correct categories!")
+            symptoms = {"Irregular periods": "Hormonal Imbalance", "Excessive hair growth": "Androgen Excess", "Weight gain": "Insulin Resistance", "Acne": "Hormonal Imbalance"}
+            shuffled_keys = list(symptoms.keys())
+            random.shuffle(shuffled_keys)
+            score = 0
+            for symptom in shuffled_keys:
+                answer = st.selectbox(f"Match: {symptom}", ["Hormonal Imbalance", "Androgen Excess", "Insulin Resistance", "Other"])
+                if answer == symptoms[symptom]:
+                    score += 1
+            if st.button("Submit Matches"):
+                st.write(f"✅ Your Score: {score}/{len(symptoms)}")
         
         elif game_choice == "Bubble Selection":
             st.write("🎈 Select the correct bubbles related to PCOS management!")
-            st.write("(Feature coming soon!)")
+            options = ["Healthy Diet", "Skipping Meals", "Regular Exercise", "Stress", "Adequate Sleep", "Insulin Resistance"]
+            correct_answers = {"Healthy Diet", "Regular Exercise", "Adequate Sleep"}
+            selected = st.multiselect("Choose the correct options:", options)
+            if st.button("Submit Selections"):
+                score = len(set(selected) & correct_answers)
+                st.write(f"✅ Your Score: {score}/{len(correct_answers)}")
     
     elif choice == 'Quiz':
         st.title("PCOS Knowledge Quiz")
