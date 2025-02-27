@@ -82,10 +82,21 @@ elif page == "PCOS Prediction Game":
         else:
             st.warning(f"⚠️ High risk of PCOS. Estimated risk: {risk_level}%")
 
-        fig, ax = plt.subplots()
-        sns.barplot(x=["Low", "Medium", "High"], y=[30, 60, risk_level], color="gray")
-        ax.bar(["Low", "Medium", "High"], [30, 60, risk_level], color=["green", "orange", "red"])
-        st.pyplot(fig)
+        fig = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=risk_level,
+            title={"text": "PCOS Risk Meter"},
+            gauge={
+                "axis": {"range": [0, 100]},
+                "steps": [
+                    {"range": [0, 40], "color": "green"},
+                    {"range": [40, 70], "color": "yellow"},
+                    {"range": [70, 100], "color": "red"}
+                ],
+                "bar": {"color": "blue"}
+            }
+        ))
+        st.plotly_chart(fig)
 
     st.write("\nThank you for playing! 🌟")
 
@@ -133,9 +144,10 @@ elif page == "Lifestyle Quiz":
     score = sum(o[st.radio(q, list(o.keys()), index=0)] for q, o in questions.items())
     st.subheader(f"📊 Your PCOS Risk Score: **{score}**")
 
-    if score < 40:
-        st.success("✅ You're doing great! Keep maintaining a balanced lifestyle.")
-    elif score < 70:
-        st.warning("⚠️ Consider improving your diet and exercise habits to lower risk.")
-    else:
-        st.error("🚨 High risk detected! Consult a healthcare provider and adopt healthier habits.")
+    fig = go.Figure(go.Indicator(
+        mode="gauge+number",
+        value=score,
+        title={"text": "Lifestyle Risk Meter"},
+        gauge={"axis": {"range": [0, 100]}, "bar": {"color": "blue"}}
+    ))
+    st.plotly_chart(fig)
