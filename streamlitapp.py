@@ -132,3 +132,23 @@ elif page == "Community Forum":
             if st.button(f"👍 {st.session_state.upvotes[post_id]}", key=f"upvote_{post_id}"):
                 st.session_state.upvotes[post_id] += 1
             st.markdown("---")
+
+# Lifestyle Quiz
+elif page == "Lifestyle Quiz":
+    st.title("📝 Lifestyle Quiz")
+    st.write("Take this quiz to assess your lifestyle habits.")
+    
+    # Sample questions
+    score = 0
+    if st.radio("How often do you exercise?", ["Never", "Sometimes", "Regularly"]) == "Regularly":
+        score += 1
+    if st.radio("Do you follow a balanced diet?", ["No", "Somewhat", "Yes"]) == "Yes":
+        score += 1
+    
+    st.write(f"Your healthy lifestyle score: {score}/2")
+
+# Healthy Recipes
+elif page == "Healthy Recipes":
+    st.title("🥗 Healthy Recipes")
+    st.write("Discover delicious and healthy meals!")
+    st.markdown("- **Avocado Toast**: Whole grain bread, mashed avocado, salt, and pepper.")
