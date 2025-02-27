@@ -14,7 +14,7 @@ st.set_page_config(page_title="PCOS Prediction", layout="wide")
 menu = st.sidebar.radio("Navigation", ["Home", "Upload Data", "Visualize Data", "Predict PCOS"])
 
 def clean_column_names(df):
-    df.columns = df.columns.str.strip().str.replace(" ", "_").str.replace("/", "_")
+    df.columns = df.columns.str.strip().str.replace(" ", "_").str.replace("/", "_").str.lower()
     return df
 
 if menu == "Home":
@@ -40,16 +40,16 @@ elif menu == "Visualize Data":
         df = pd.read_csv("pcos_data.csv")
         df = clean_column_names(df)
         st.write("Showing crucial PCOS-related features:")
-        features = ["Age_yrs", "BMI", "Cycle_length_days", "FSH_mIU_mL", "LH_mIU_mL", "AMH_ng_mL",
-                    "TSH_mIU_L", "Follicle_No_L", "Follicle_No_R", "Avg_F_size_L_mm", "Avg_F_size_R_mm",
-                    "Endometrium_mm", "Weight_gain_Y_N", "hair_growth_Y_N", "Skin_darkening_Y_N",
-                    "Hair_loss_Y_N", "Pimples_Y_N", "Fast_food_Y_N", "Reg_Exercise_Y_N"]
-        df = df[features + ["PCOS_Y_N"]]
+        features = ["age_yrs", "bmi", "cycle_length_days", "fsh_miu_ml", "lh_miu_ml", "amh_ng_ml",
+                    "tsh_miu_l", "follicle_no_l", "follicle_no_r", "avg_f_size_l_mm", "avg_f_size_r_mm",
+                    "endometrium_mm", "weight_gain_y_n", "hair_growth_y_n", "skin_darkening_y_n",
+                    "hair_loss_y_n", "pimples_y_n", "fast_food_y_n", "reg_exercise_y_n"]
+        df = df[features + ["pcos_y_n"]]
         
         # Barplot
         st.subheader("Bar Plot of PCOS Cases")
         fig, ax = plt.subplots()
-        sns.countplot(data=df, x="PCOS_Y_N", palette="coolwarm", ax=ax)
+        sns.countplot(data=df, x="pcos_y_n", palette="coolwarm", ax=ax)
         st.pyplot(fig)
         
         # Histograms
@@ -61,7 +61,7 @@ elif menu == "Visualize Data":
         
         # Pie Chart
         st.subheader("Pie Chart for Lifestyle Factors")
-        pie_feature = st.selectbox("Select a feature for pie chart", ["Weight_gain_Y_N", "hair_growth_Y_N", "Skin_darkening_Y_N", "Hair_loss_Y_N", "Pimples_Y_N"])
+        pie_feature = st.selectbox("Select a feature for pie chart", ["weight_gain_y_n", "hair_growth_y_n", "skin_darkening_y_n", "hair_loss_y_n", "pimples_y_n"])
         fig, ax = plt.subplots()
         df[pie_feature].value_counts().plot.pie(autopct="%.1f%%", ax=ax)
         st.pyplot(fig)
@@ -76,13 +76,13 @@ elif menu == "Predict PCOS":
     try:
         df = pd.read_csv("pcos_data.csv")
         df = clean_column_names(df)
-        features = ["Age_yrs", "BMI", "Cycle_length_days", "FSH_mIU_mL", "LH_mIU_mL", "AMH_ng_mL",
-                    "TSH_mIU_L", "Follicle_No_L", "Follicle_No_R", "Avg_F_size_L_mm", "Avg_F_size_R_mm",
-                    "Endometrium_mm", "Weight_gain_Y_N", "hair_growth_Y_N", "Skin_darkening_Y_N",
-                    "Hair_loss_Y_N", "Pimples_Y_N", "Fast_food_Y_N", "Reg_Exercise_Y_N"]
+        features = ["age_yrs", "bmi", "cycle_length_days", "fsh_miu_ml", "lh_miu_ml", "amh_ng_ml",
+                    "tsh_miu_l", "follicle_no_l", "follicle_no_r", "avg_f_size_l_mm", "avg_f_size_r_mm",
+                    "endometrium_mm", "weight_gain_y_n", "hair_growth_y_n", "skin_darkening_y_n",
+                    "hair_loss_y_n", "pimples_y_n", "fast_food_y_n", "reg_exercise_y_n"]
         
         X = df[features]
-        y = df["PCOS_Y_N"]
+        y = df["pcos_y_n"]
         
         # Data Preprocessing
         scaler = StandardScaler()
