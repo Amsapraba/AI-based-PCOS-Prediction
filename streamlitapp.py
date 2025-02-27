@@ -30,20 +30,18 @@ elif page == "Non-Invasive Assessment":
         responses = [weight_gain, hair_loss, fast_food, pimples, exercise]
         risk_score = responses.count("Yes") / len(responses) * 100
         
-        labels = ["Healthy", "At Risk"]
-        sizes = [100 - risk_score, risk_score]
-        colors = ["#76c7c0", "#ff6f61"]
-        
         st.subheader("Your PCOS Risk Levels")
         fig, ax = plt.subplots()
-        ax.pie(sizes, labels=labels, autopct='%1.1f%%', colors=colors, startangle=90)
+        sns.barplot(x=["Healthy", "At Risk"], y=[100 - risk_score, risk_score], palette=["#76c7c0", "#ff6f61"], ax=ax)
+        ax.set_ylabel("Percentage")
         st.pyplot(fig)
         
         st.success("Assessment completed! Consult a doctor for more insights.")
     
     st.subheader("Ideal Health Distribution for Women")
     fig, ax = plt.subplots()
-    ax.pie([90, 10], labels=["Healthy", "At Risk"], autopct='%1.1f%%', colors=["#76c7c0", "#ff6f61"], startangle=90)
+    sns.barplot(x=["Healthy", "At Risk"], y=[90, 10], palette=["#76c7c0", "#ff6f61"], ax=ax)
+    ax.set_ylabel("Percentage")
     st.pyplot(fig)
     
 elif page == "Invasive Assessment":
@@ -61,20 +59,19 @@ elif page == "Invasive Assessment":
             
             if st.button("Analyze Risk"):
                 risk_score = np.mean(list(values.values()))
-                labels = ["Healthy", "At Risk"]
-                sizes = [100 - risk_score, risk_score]
-                colors = ["#76c7c0", "#ff6f61"]
                 
                 st.subheader("Your PCOS Risk Levels")
                 fig, ax = plt.subplots()
-                ax.pie(sizes, labels=labels, autopct='%1.1f%%', colors=colors, startangle=90)
+                sns.barplot(x=["Healthy", "At Risk"], y=[100 - risk_score, risk_score], palette=["#76c7c0", "#ff6f61"], ax=ax)
+                ax.set_ylabel("Percentage")
                 st.pyplot(fig)
                 
                 st.success("Assessment completed! Consult a doctor for more insights.")
     
     st.subheader("Ideal Health Distribution for Women")
     fig, ax = plt.subplots()
-    ax.pie([90, 10], labels=["Healthy", "At Risk"], autopct='%1.1f%%', colors=["#76c7c0", "#ff6f61"], startangle=90)
+    sns.barplot(x=["Healthy", "At Risk"], y=[90, 10], palette=["#76c7c0", "#ff6f61"], ax=ax)
+    ax.set_ylabel("Percentage")
     st.pyplot(fig)
     
 # The rest of the pages remain unchanged.
