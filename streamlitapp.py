@@ -103,7 +103,7 @@ elif page == "PCOS Prediction Game":
 # Community Forum
 elif page == "Community Forum":
     st.title("🌍 PCOS Community Forum")
-    st.markdown("### Share experiences, tips, and support with others!")
+    st.markdown("### Share your feelings, symptoms, and feedback!")
 
     if "posts" not in st.session_state:
         st.session_state.posts = []
@@ -111,13 +111,16 @@ elif page == "Community Forum":
 
     with st.form("new_post"):
         user_name = st.text_input("Your Name (or leave blank for anonymous):")
-        user_message = st.text_area("Share your experience or ask a question:")
+        user_feelings = st.text_area("How do you feel today?")
+        user_symptoms = st.text_area("Describe any symptoms you're experiencing:")
+        user_feedback = st.text_area("Any feedback or suggestions for the community?")
         submit_button = st.form_submit_button("Post")
 
-        if submit_button and user_message:
+        if submit_button and (user_feelings or user_symptoms or user_feedback):
             user_name = user_name if user_name else "Anonymous"
             post_id = len(st.session_state.posts)
-            st.session_state.posts.append((post_id, user_name, user_message))
+            post_content = f"**Feelings:** {user_feelings}\n**Symptoms:** {user_symptoms}\n**Feedback:** {user_feedback}"
+            st.session_state.posts.append((post_id, user_name, post_content))
             st.session_state.upvotes[post_id] = 0
             st.success("✅ Post shared successfully!")
 
@@ -125,7 +128,7 @@ elif page == "Community Forum":
 
     if st.session_state.posts:
         for post_id, name, message in reversed(st.session_state.posts):
-            st.markdown(f"**{name}:** {message}")
+            st.markdown(f"**{name}:**\n{message}")
             if st.button(f"👍 {st.session_state.upvotes[post_id]}", key=f"upvote_{post_id}"):
                 st.session_state.upvotes[post_id] += 1
             st.markdown("---")
