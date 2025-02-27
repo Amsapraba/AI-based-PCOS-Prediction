@@ -40,18 +40,31 @@ elif page == "Leaderboard":
 elif page == "Data Visualization":
     st.title("Non-Invasive Health Feature Visualization")
     uploaded_file = st.file_uploader("Upload CSV for analysis", type=["csv"])
+    
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
-        non_invasive_features = ["Age", "BMI", "Blood Pressure", "Heart Rate", "Steps per Day"]
-        df = df[non_invasive_features].dropna()
         
-        st.subheader("Health Trends of Non-Invasive Features")
-        fig, ax = plt.subplots(figsize=(10,6))
-        sns.boxplot(data=df, ax=ax)
-        ax.set_xticklabels(non_invasive_features, rotation=45)
-        st.pyplot(fig)
+        # Display available columns
+        st.write("Available columns in dataset:", list(df.columns))
         
-        st.subheader("Correlation Heatmap of Non-Invasive Features")
-        fig, ax = plt.subplots(figsize=(10,6))
-        sns.heatmap(df.corr(), annot=True, cmap='coolwarm', ax=ax)
-        st.pyplot(fig)
+        # Define possible non-invasive features
+        possible_features = ["Age", "BMI", "Blood Pressure", "Heart Rate", "Steps per Day"]
+        
+        # Find matching columns in uploaded dataset
+        available_features = [col for col in possible_features if col in df.columns]
+        
+        if available_features:
+            df = df[available_features].dropna()
+            
+            st.subheader("Health Trends of Non-Invasive Features")
+            fig, ax = plt.subplots(figsize=(10,6))
+            sns.boxplot(data=df, ax=ax)
+            ax.set_xticklabels(available_features, rotation=45)
+            st.pyplot(fig)
+            
+            st.subheader("Correlation Heatmap of Non-Invasive Features")
+            fig, ax = plt.subplots(figsize=(10,6))
+            sns.heatmap(df.corr(), annot=True, cmap='coolwarm', ax=ax)
+            st.pyplot(fig)
+        else:
+            st.error("No matching non-invasive health features found in the uploaded dataset. Please upload a valid CSV.")
