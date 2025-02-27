@@ -130,5 +130,5 @@ elif page == "Lifestyle Quiz":
         "How many hours of sleep do you get per night?": {"More than 8": 0, "7-8 hours": 10, "5-6 hours": 20, "Less than 5": 30}
     }
 
-    score = sum(st.radio(q, list(o.keys()), index=0) for q, o in questions.items())
+    score = sum(o[st.radio(q, list(o.keys()), index=0)] for q, o in questions.items())
     st.subheader(f"📊 Your PCOS Risk Score: **{score}**")
