@@ -132,3 +132,10 @@ elif page == "Lifestyle Quiz":
 
     score = sum(o[st.radio(q, list(o.keys()), index=0)] for q, o in questions.items())
     st.subheader(f"📊 Your PCOS Risk Score: **{score}**")
+
+    if score < 40:
+        st.success("✅ You're doing great! Keep maintaining a balanced lifestyle.")
+    elif score < 70:
+        st.warning("⚠️ Consider improving your diet and exercise habits to lower risk.")
+    else:
+        st.error("🚨 High risk detected! Consult a healthcare provider and adopt healthier habits.")
