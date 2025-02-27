@@ -57,6 +57,49 @@ if page == "Home":
     st.title("🏥 PCOS Prediction Dashboard")
     st.write("Welcome to the PCOS Prediction App! Navigate through the sidebar to explore features.")
 
+# PCOS Prediction Game
+elif page == "PCOS Prediction Game":
+    st.title("🎮 PCOS Prediction Game")
+    st.write("Enter your details to predict your PCOS risk.")
+
+    user_input = []
+    progress_bar = st.progress(0)
+
+    for idx, feature in enumerate(X.columns):
+        value = st.number_input(f"Enter your {feature}", min_value=0.0, format="%.2f")
+        user_input.append(value)
+        progress_bar.progress((idx + 1) / len(X.columns))
+
+    if st.button("🎲 Predict PCOS Risk!"):
+        with st.spinner("Analyzing your data...🔍"):
+            time.sleep(2)
+            user_input = np.array(user_input).reshape(1, -1)
+            prediction = model.predict(user_input)
+            risk_level = random.randint(1, 100)
+
+        if prediction[0] == 0:
+            st.success(f"✅ Low risk of PCOS. Estimated risk: {risk_level}%")
+        else:
+            st.warning(f"⚠️ High risk of PCOS. Estimated risk: {risk_level}%")
+
+        fig = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=risk_level,
+            title={"text": "PCOS Risk Meter"},
+            gauge={
+                "axis": {"range": [0, 100]},
+                "steps": [
+                    {"range": [0, 40], "color": "green"},
+                    {"range": [40, 70], "color": "yellow"},
+                    {"range": [70, 100], "color": "red"}
+                ],
+                "bar": {"color": "blue"}
+            }
+        ))
+        st.plotly_chart(fig)
+
+    st.write("\nThank you for playing! 🌟")
+
 # Community Forum
 elif page == "Community Forum":
     st.title("🌍 PCOS Community Forum")
@@ -89,42 +132,3 @@ elif page == "Community Forum":
             if st.button(f"👍 {st.session_state.upvotes[post_id]}", key=f"upvote_{post_id}"):
                 st.session_state.upvotes[post_id] += 1
             st.markdown("---")
-
-# Lifestyle Quiz
-elif page == "Lifestyle Quiz":
-    st.title("🩺 PCOS Lifestyle Risk Assessment")
-    questions = {
-        "How often do you exercise?": {"Daily": 0, "3-5 times a week": 10, "1-2 times a week": 20, "Rarely": 30},
-        "How would you rate your diet?": {"Excellent": 0, "Good": 10, "Average": 20, "Poor": 30},
-        "Do you have irregular menstrual cycles?": {"Never": 0, "Occasionally": 10, "Often": 20, "Always": 30},
-        "How stressed do you feel daily?": {"Not at all": 0, "Mildly": 10, "Moderately": 20, "Highly stressed": 30},
-        "How many hours of sleep do you get per night?": {"More than 8": 0, "7-8 hours": 10, "5-6 hours": 20, "Less than 5": 30}
-    }
-
-    score = sum(o[st.radio(q, list(o.keys()), index=0)] for q, o in questions.items())
-    st.subheader(f"📊 Your PCOS Risk Score: **{score}**")
-
-    fig = go.Figure(go.Indicator(
-        mode="gauge+number",
-        value=score,
-        title={"text": "Lifestyle Risk Meter"},
-        gauge={"axis": {"range": [0, 100]}, "bar": {"color": "blue"}}
-    ))
-    st.plotly_chart(fig)
-
-# Healthy Recipes
-elif page == "Healthy Recipes":
-    st.title("🍏 Healthy Recipes for PCOS")
-    st.write("Explore nutritious and easy-to-make recipes that can help manage PCOS symptoms.")
-
-    recipes = {
-        "Avocado & Egg Toast": "Toast whole-grain bread, top with mashed avocado and a poached egg, season with salt & pepper.",
-        "Berry Smoothie": "Blend mixed berries, Greek yogurt, chia seeds, and almond milk for a refreshing smoothie.",
-        "Quinoa Salad": "Mix cooked quinoa, cherry tomatoes, cucumber, feta cheese, and a lemon-olive oil dressing.",
-        "Oatmeal with Nuts & Seeds": "Cook oats with almond milk, top with walnuts, flaxseeds, and a drizzle of honey.",
-        "Grilled Salmon with Veggies": "Season salmon with herbs, grill with bell peppers and zucchini, serve with brown rice."
-    }
-
-    for recipe, instructions in recipes.items():
-        st.subheader(recipe)
-        st.write(instructions)
