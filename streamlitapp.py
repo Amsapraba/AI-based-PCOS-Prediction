@@ -17,6 +17,29 @@ def main():
         st.write("💡 Stay informed, stay healthy, and embrace a proactive approach to well-being.")
         st.write("🚀 Let's embark on this journey towards better health together!")
     
+    elif choice == 'Symptoms':
+        st.title("⚠️ Symptoms of PCOS")
+        st.write("- 📌 **Irregular menstrual cycles**")
+        st.write("- 📌 **Excessive hair growth (hirsutism)**")
+        st.write("- 📌 **Acne and oily skin**")
+        st.write("- 📌 **Weight gain and difficulty losing weight**")
+        st.write("- 📌 **Thinning hair or hair loss on the scalp**")
+    
+    elif choice == 'Causes':
+        st.title("🧐 Causes of PCOS")
+        st.write("- 🔬 **Insulin resistance** - Reduces the body's ability to use insulin effectively.")
+        st.write("- 🏋️‍♀️ **Excess androgen production** - Leads to symptoms like excessive hair growth and acne.")
+        st.write("- 🧬 **Genetic factors** - A family history of PCOS may increase the likelihood of developing the condition.")
+        st.write("- 🔥 **Chronic inflammation** - Linked to higher androgen levels and insulin resistance.")
+    
+    elif choice == 'Preventive Measures':
+        st.title("🛡️ Preventive Health Measures for PCOS")
+        st.write("- 🥗 **Maintain a healthy diet** - Consume whole foods, fiber-rich meals, and avoid processed sugars.")
+        st.write("- 🏃‍♀️ **Engage in regular physical activity** - Exercise helps improve insulin sensitivity and manage symptoms.")
+        st.write("- 🧘‍♀️ **Manage stress effectively** - Mindfulness, yoga, and relaxation techniques can help balance hormones.")
+        st.write("- 😴 **Ensure adequate sleep** - Maintain a consistent sleep schedule to regulate hormonal balance.")
+        st.write("- 🩺 **Consult a healthcare professional** - Early detection and proactive management can prevent complications.")
+    
     elif choice == 'Games':
         st.title("Interactive Games")
         st.write("🎮 Engage with fun and educational games to test your knowledge about PCOS.")
@@ -39,74 +62,6 @@ def main():
                     if user_answers[i] == answer:
                         score += 1
                 st.write(f"✅ Your Score: {score}/{len(questions)}")
-        
-        elif game_choice == "Match the Symptoms":
-            st.write("🧩 Match the symptoms with the correct categories!")
-            symptoms = {"Irregular periods": "Hormonal Imbalance", "Excessive hair growth": "Androgen Excess", "Weight gain": "Insulin Resistance", "Acne": "Hormonal Imbalance"}
-            shuffled_keys = list(symptoms.keys())
-            random.shuffle(shuffled_keys)
-            score = 0
-            user_answers = {}
-            for symptom in shuffled_keys:
-                user_answers[symptom] = st.selectbox(f"Match: {symptom}", ["Hormonal Imbalance", "Androgen Excess", "Insulin Resistance", "Other"], key=symptom)
-            if st.button("Submit Matches"):
-                for symptom in shuffled_keys:
-                    st.write(f"✅ Correct Answer: {symptoms[symptom]}")
-                    if user_answers[symptom] == symptoms[symptom]:
-                        score += 1
-                st.write(f"✅ Your Score: {score}/{len(symptoms)}")
-        
-        elif game_choice == "Bubble Selection":
-            st.write("🎈 Select the correct bubbles related to PCOS management!")
-            options = ["Healthy Diet", "Skipping Meals", "Regular Exercise", "Stress", "Adequate Sleep", "Insulin Resistance"]
-            correct_answers = {"Healthy Diet", "Regular Exercise", "Adequate Sleep"}
-            selected = st.multiselect("Choose the correct options:", options)
-            if st.button("Submit Selections"):
-                score = len(set(selected) & correct_answers)
-                st.write(f"✅ Correct Answers: {', '.join(correct_answers)}")
-                st.write(f"✅ Your Score: {score}/{len(correct_answers)}")
-    
-    elif choice == 'Quiz':
-        st.title("PCOS Knowledge Quiz")
-        st.write("🧠 Test your knowledge about PCOS and gain awareness.")
-        questions = [
-            ("What is a common symptom of PCOS?", ["High energy levels", "Irregular periods", "Low blood pressure", "Hair thinning"], "Irregular periods", "PCOS often causes irregular periods due to hormonal imbalances."),
-            ("Which hormone is primarily responsible for insulin resistance in PCOS?", ["Cortisol", "Insulin", "Estrogen", "Androgens"], "Androgens", "Elevated androgens contribute to insulin resistance, a key feature of PCOS.")
-        ]
-        score = 0
-        user_answers = {}
-        for i, (q, options, answer, explanation) in enumerate(questions):
-            user_answers[i] = st.radio(q, options, key=f"quiz_{i}")
-        if st.button("Submit Quiz"):
-            for i, (_, _, answer, explanation) in enumerate(questions):
-                st.write(f"✅ Correct Answer: {answer}")
-                st.write(f"ℹ️ Explanation: {explanation}")
-                if user_answers[i] == answer:
-                    score += 1
-            st.write(f"✅ Your Score: {score}/{len(questions)}")
-    
-    elif choice == 'Symptoms':
-        st.title("Symptoms of PCOS")
-        st.write("- Irregular menstrual cycles")
-        st.write("- Excessive hair growth (hirsutism)")
-        st.write("- Acne and oily skin")
-        st.write("- Weight gain and difficulty losing weight")
-        st.write("- Thinning hair or hair loss on the scalp")
-    
-    elif choice == 'Causes':
-        st.title("Causes of PCOS")
-        st.write("- Insulin resistance")
-        st.write("- Excess androgen production")
-        st.write("- Genetic factors")
-        st.write("- Chronic inflammation")
-    
-    elif choice == 'Preventive Measures':
-        st.title("Preventive Measures for PCOS")
-        st.write("- Maintain a healthy diet rich in whole foods and low in processed sugars")
-        st.write("- Engage in regular physical activity")
-        st.write("- Manage stress through mindfulness and relaxation techniques")
-        st.write("- Get adequate sleep and maintain a consistent sleep schedule")
-        st.write("- Consult a healthcare professional for early detection and management")
     
 if __name__ == "__main__":
     main()
