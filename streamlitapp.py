@@ -2,10 +2,14 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
 
 st.set_page_config(page_title="PCOS ML Game", page_icon="✨")
 
-page = st.sidebar.radio("Navigation", ["Home", "What is PCOS?", "PCOS Dataset", "Data Visualization"])
+page = st.sidebar.radio("Navigation", ["Home", "What is PCOS?", "PCOS Dataset", "Data Visualization", "PCOS Prediction"])
 
 if page == "Home":
     st.title("Welcome to Our PCOS ML Game!")
@@ -80,3 +84,39 @@ elif page == "Data Visualization":
         numeric_df = df.select_dtypes(include=['number']).dropna()
         sns.heatmap(numeric_df.corr(), annot=False, cmap='coolwarm', ax=ax)
         st.pyplot(fig)
+
+elif page == "PCOS Prediction":
+    st.title("PCOS Prediction Model")
+    st.write("Upload the dataset to train and test a machine learning model.")
+    
+    uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
+    if uploaded_file is not None:
+        df = pd.read_csv(uploaded_file)
+        
+        # Ensure numeric data
+        df = df.select_dtypes(include=['number']).dropna()
+        
+        # Define features and target
+        X = df.drop(columns=['PCOS (Y/N)'])
+        y = df['PCOS (Y/N)']
+        
+        # Train-test split
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        
+        # Standardizing data
+        scaler = StandardScaler()
+        X_train = scaler.fit_transform(X_train)
+        X_test = scaler.transform(X_test)
+        
+        # Train Model
+        model = RandomForestClassifier(n_estimators=100, random_state=42)
+        model.fit(X_train, y_train)
+        
+        # Predictions
+        y_pred = model.predict(X_test)
+        accuracy = accuracy_score(y_test, y_pred)
+        
+        st.subheader("Model Performance")
+        st.write(f"Accuracy: {accuracy * 100:.2f}%")
+        st.text("Classification Report:")
+        st.text(classification_report(y_test, y_pred))
