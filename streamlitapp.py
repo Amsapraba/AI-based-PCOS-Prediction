@@ -1,4 +1,5 @@
 import streamlit as st
+import random
 
 def main():
     st.set_page_config(page_title='PCOS Prediction Dashboard', layout='wide')
@@ -18,11 +19,58 @@ def main():
     
     elif choice == 'Games':
         st.title("PCOS Awareness Games")
-        st.write("Engaging and interactive games to learn more about PCOS.")
-        st.write("🎲 **PCOS Trivia** - Answer fun and informative questions about PCOS.")
-        st.write("🧩 **Puzzle Challenge** - Solve PCOS-related puzzles and crosswords.")
-        st.write("🕵️ **Find the Myth** - Spot common myths and misconceptions about PCOS.")
-        st.write("💡 **Health Bingo** - Play a wellness-focused bingo game with PCOS facts.")
+        game_choice = st.radio("Choose a game:", ["PCOS Trivia", "Puzzle Challenge", "Find the Myth"])
+        
+        if game_choice == "PCOS Trivia":
+            st.subheader("PCOS Trivia - Answer the MCQs")
+            questions = {
+                "What is a common symptom of PCOS?": ["Irregular periods", "Low blood pressure", "Increased vision", "Stronger bones"],
+                "Which hormone is often elevated in PCOS?": ["Insulin", "Testosterone", "Estrogen", "Melatonin"],
+                "What lifestyle change can help manage PCOS?": ["Exercise", "Skipping meals", "Ignoring symptoms", "Sleeping less"]
+            }
+            score = 0
+            for q, options in questions.items():
+                answer = st.radio(q, options)
+                if answer == options[0]:
+                    score += 1
+            if st.button("Submit Answers"):
+                if score >= 2:
+                    st.success(f"Great job! You scored {score}/3 and won 10 points!")
+                else:
+                    st.error(f"Keep learning! You scored {score}/3. Try again!")
+        
+        elif game_choice == "Puzzle Challenge":
+            st.subheader("Match the Correct Terms")
+            pairs = {"PCOS": "Hormonal disorder", "Insulin Resistance": "Can lead to diabetes", "Exercise": "Helps in PCOS management"}
+            score = 0
+            for key in pairs:
+                match = st.selectbox(f"{key} is related to:", ["Hormonal disorder", "Can lead to diabetes", "Helps in PCOS management", "Unrelated"])
+                if match == pairs[key]:
+                    score += 1
+            if st.button("Check Answers"):
+                if score >= 2:
+                    st.success(f"Awesome! You scored {score}/3 and won 10 points!")
+                else:
+                    st.error(f"Try again! You scored {score}/3.")
+        
+        elif game_choice == "Find the Myth":
+            st.subheader("Spot the Myth - Select the incorrect statement")
+            myths = {
+                "PCOS is curable": False,
+                "Only overweight women get PCOS": False,
+                "PCOS can affect fertility": True,
+                "PCOS is always caused by genetics": False
+            }
+            score = 0
+            for statement, truth in myths.items():
+                selection = st.radio(f"{statement}", ["True", "False"])
+                if (selection == "False" and not truth) or (selection == "True" and truth):
+                    score += 1
+            if st.button("Submit"):
+                if score >= 3:
+                    st.success(f"You're a myth buster! You scored {score}/4 and won 10 points!")
+                else:
+                    st.error(f"Almost there! You scored {score}/4. Try again!")
     
     elif choice == 'Quiz':
         st.title("PCOS Health Quiz")
