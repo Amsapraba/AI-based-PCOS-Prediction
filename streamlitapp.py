@@ -19,6 +19,10 @@ def main():
     elif choice == 'Games':
         st.title("PCOS Awareness Games")
         st.write("Engaging and interactive games to learn more about PCOS.")
+        st.write("🎲 **PCOS Trivia** - Answer fun and informative questions about PCOS.")
+        st.write("🧩 **Puzzle Challenge** - Solve PCOS-related puzzles and crosswords.")
+        st.write("🕵️ **Find the Myth** - Spot common myths and misconceptions about PCOS.")
+        st.write("💡 **Health Bingo** - Play a wellness-focused bingo game with PCOS facts.")
     
     elif choice == 'Quiz':
         st.title("PCOS Health Quiz")
