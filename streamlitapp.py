@@ -1,104 +1,230 @@
-import streamlit as st
 import numpy as np
 import pandas as pd
+import streamlit as st
+import time
+import random
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
-st.set_page_config(page_title="Health Tracking Game", page_icon="✨")
-
-page = st.sidebar.radio("Navigation", ["Home", "Non-Invasive Assessment", "Invasive Assessment", "Symptom-Based AI Prediction", "Health Quiz", "Community Support"])
-
-if page == "Home":
-    st.title("Welcome to the Health Tracking Game!")
-    st.write("Log your health, interact with the community, and test your knowledge!")
+# Load and prepare dataset
+file_path = "PCOS_data.csv"
+try:
+    df = pd.read_csv(file_path)
+    df_cleaned = df.drop(columns=["Sl. No", "Patient File No.", "Unnamed: 44"], errors="ignore")
     
-elif page == "Non-Invasive Assessment":
-    st.title("Non-Invasive Health Assessment")
-    st.write("Enter your non-invasive health details to analyze your PCOS risk.")
-    
-    age = st.number_input("Age", min_value=0, max_value=120, value=25)
-    bmi = st.number_input("BMI", min_value=10.0, max_value=50.0, value=22.0)
-    weight_gain = st.radio("Have you experienced weight gain?", ["Yes", "No"])
-    hair_loss = st.radio("Are you experiencing hair loss?", ["Yes", "No"])
-    fast_food = st.radio("Do you consume fast food frequently?", ["Yes", "No"])
-    pimples = st.radio("Do you have frequent pimples?", ["Yes", "No"])
-    exercise = st.radio("Do you exercise regularly?", ["Yes", "No"])
-    
-    if st.button("Analyze Risk"):
-        responses = [weight_gain, hair_loss, fast_food, pimples, exercise]
-        risk_score = responses.count("Yes") / len(responses) * 100
-        
-        st.subheader("Your PCOS Risk Levels")
-        fig, ax = plt.subplots()
-        sns.barplot(x=["Healthy", "At Risk"], y=[100 - risk_score, risk_score], palette=["#76c7c0", "#ff6f61"], ax=ax)
-        ax.set_ylabel("Percentage")
-        st.pyplot(fig)
-        
-        st.success("Assessment completed! Consult a doctor for more insights.")
-    
-    st.subheader("Ideal Health Distribution for Women")
-    fig, ax = plt.subplots()
-    sns.barplot(x=["Healthy", "At Risk"], y=[90, 10], palette=["#76c7c0", "#ff6f61"], ax=ax)
-    ax.set_ylabel("Percentage")
-    st.pyplot(fig)
-    
-elif page == "Invasive Assessment":
-    st.title("Invasive Health Assessment")
-    st.write("Enter your invasive test results to analyze your PCOS risk.")
-    
-    uploaded_file = st.file_uploader("Upload your lab results (CSV)", type=["csv"])
-    if uploaded_file:
-        df = pd.read_csv(uploaded_file)
-        invasive_features = df.columns.difference(["Age", "BMI", "Weight Gain", "Hair Loss", "Fast Food", "Pimples", "Regular Exercise"])
-        selected_features = st.multiselect("Select parameters to include:", invasive_features)
-        
-        if selected_features:
-            values = {feature: st.number_input(f"{feature}", min_value=0.0) for feature in selected_features}
-            
-            if st.button("Analyze Risk"):
-                risk_score = np.mean(list(values.values()))
-                
-                st.subheader("Your PCOS Risk Levels")
-                fig, ax = plt.subplots()
-                sns.barplot(x=["Healthy", "At Risk"], y=[100 - risk_score, risk_score], palette=["#76c7c0", "#ff6f61"], ax=ax)
-                ax.set_ylabel("Percentage")
-                st.pyplot(fig)
-                
-                st.success("Assessment completed! Consult a doctor for more insights.")
-    
-    st.subheader("Ideal Health Distribution for Women")
-    fig, ax = plt.subplots()
-    sns.barplot(x=["Healthy", "At Risk"], y=[90, 10], palette=["#76c7c0", "#ff6f61"], ax=ax)
-    ax.set_ylabel("Percentage")
-    st.pyplot(fig)
-    
-# The rest of the pages remain unchanged.
-elif page == "Symptom-Based AI Prediction":
-    st.title("AI Symptom Prediction")
-    st.write("Enter your symptoms, and the AI will suggest possible conditions.")
-    symptom_input = st.text_area("Describe your symptoms (e.g., headache, fever, fatigue)")
-    if st.button("Predict Condition"):
-        example_conditions = {"headache fever fatigue": "Possible flu or viral infection"}
-        st.subheader("Prediction Result")
-        st.write(f"The AI suggests: **{example_conditions.get(symptom_input, 'Consult a doctor')}**")
-        st.success("This is a basic prediction. Consult a doctor for accurate medical advice.")
-    
-elif page == "Health Quiz":
-    st.title("Health Knowledge Quiz")
-    st.write("Test your knowledge about health and wellness!")
-    questions = {"What is a normal resting heart rate?": ["60-100 BPM", "30-50 BPM", "120-150 BPM"]}
-    for q, options in questions.items():
-        answer = st.radio(q, options)
-        if answer == options[0]:
-            st.success("Correct!")
+    # Handle missing values
+    for col in df_cleaned.columns:
+        if df_cleaned[col].dtype == "object":
+            df_cleaned[col].fillna(df_cleaned[col].mode()[0], inplace=True)
         else:
-            st.error("Incorrect, try again!")
+            df_cleaned[col].fillna(df_cleaned[col].median(), inplace=True)
     
-elif page == "Community Support":
-    st.title("Community Support & Discussions")
-    st.write("Share your experiences, ask health questions, and support others!")
-    user_post = st.text_area("Write a post or ask a question")
-    if st.button("Post"):
-        st.success("Your post has been shared!")
+    # Convert non-numeric columns to numeric
+    df_cleaned = df_cleaned.apply(pd.to_numeric, errors="coerce")
+
+    # Define features (X) and target variable (y)
+    if "PCOS (Y/N)" not in df_cleaned.columns:
+        raise ValueError("Target column 'PCOS (Y/N)' not found in the dataset.")
+    
+    X = df_cleaned.drop(columns=["PCOS (Y/N)"])
+    y = df_cleaned["PCOS (Y/N)"]
+    
+    # Handle missing values in features
+    X_filled = X.fillna(X.median())
+    
+    # Split dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X_filled, y, test_size=0.2, random_state=42)
+    
+    # Train the RandomForest model
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+    
+    # Test model accuracy
+    y_pred = model.predict(X_test)
+    model_accuracy = accuracy_score(y_test, y_pred)
+    st.sidebar.write(f"✅ Model Accuracy: {model_accuracy * 100:.2f}%")
+except Exception as e:
+    st.error(f"Error loading dataset: {e}")
+    st.stop()
+
+# Health tips
+health_tips = [
+    "🌱 Eat a balanced diet rich in whole foods and fiber!",
+    "🏃‍♀️ Regular exercise can improve insulin sensitivity and overall health.",
+    "💧 Stay hydrated! Drinking enough water helps in hormonal balance.",
+    "😴 Prioritize sleep! Aim for 7-9 hours to regulate hormones.",
+    "🧘‍♀️ Manage stress with yoga, meditation, or deep breathing techniques."
+]
+
+# Streamlit UI for PCOS Prediction
+def pcos_prediction_game():
+    st.title("🎮 PCOS Prediction Game")
+    st.write("Answer the following questions and unlock insights! 🎯")
+    
+    user_input = []
+    progress_bar = st.progress(0)
+    for idx, feature in enumerate(X_filled.columns):
+        value = st.number_input(f"Enter your {feature}", min_value=0.0, format="%.2f")
+        user_input.append(value)
+        progress_bar.progress((idx + 1) / len(X_filled.columns))
+    
+    if st.button("🎲 Predict PCOS Risk!"):
+        with st.spinner("Analyzing your data...🔍"):
+            time.sleep(2)  # Simulate processing time
+            user_input = np.array(user_input).reshape(1, -1)
+            prediction = model.predict(user_input)
+            risk_level = random.randint(1, 100)
+        
+        if prediction[0] == 0:
+            st.success(f"✅ Low risk of PCOS. Your estimated risk level: {risk_level}%")
+            st.write("Great job! Keep maintaining a healthy lifestyle. 💪")
+            st.write("Here are some additional health tips for you:")
+            for tip in random.sample(health_tips, 3):
+                st.write(f"- {tip}")
+            
+            # Show a gauge chart for risk level
+            st.write("### 📊 Your Risk Level")
+            fig, ax = plt.subplots()
+            sns.barplot(x=["Low", "Medium", "High"], y=[30, 60, 90], color='lightgray')
+            ax.bar(["Low", "Medium", "High"], [30, 60, risk_level], color=['green', 'orange', 'red'])
+            st.pyplot(fig)
+    
+    st.write("\nThank you for playing! 🌟")
+
+# Run the game in Streamlit
+pcos_prediction_game()
+
+import streamlit as st
+import random
+import time
+import plotly.graph_objects as go
+
+def risk_meter(score):
+    fig = go.Figure(go.Indicator(
+        mode="gauge+number",
+        value=score,
+        title={'text': "PCOS Risk Level"},
+        gauge={
+            'axis': {'range': [0, 100]},
+            'bar': {'color': "red" if score > 70 else "orange" if score > 40 else "green"},
+            'steps': [
+                {'range': [0, 40], 'color': "lightgreen"},
+                {'range': [40, 70], 'color': "yellow"},
+                {'range': [70, 100], 'color': "red"}
+            ]
+        }
+    ))
+    return fig
+
+def spin_the_wheel():
+    tips = [
+        "Drink 8 glasses of water today! 💧", 
+        "Do 10 minutes of stretching! 🧘", 
+        "Try a sugar-free day! 🍎", 
+        "Take a deep-breathing break! 😌"
+    ]
+    return random.choice(tips)
+
+def community_forum():
+    st.title("🌍 PCOS Community Forum")
+    st.markdown("### Share experiences, tips, and support with others!")
+    
+    if "posts" not in st.session_state:
+        st.session_state.posts = []
+        st.session_state.upvotes = {}
+    
+    with st.form("new_post"):
+        user_name = st.text_input("Your Name (or leave blank for anonymous):")
+        user_message = st.text_area("Share your experience or ask a question:")
+        submit_button = st.form_submit_button("Post")
+        
+        if submit_button and user_message:
+            user_name = user_name if user_name else "Anonymous"
+            post_id = len(st.session_state.posts)
+            st.session_state.posts.append((post_id, user_name, user_message))
+            st.session_state.upvotes[post_id] = 0
+            st.success("✅ Post shared successfully!")
+    
+    st.markdown("---")
+    
+    if st.session_state.posts:
+        for post_id, name, message in reversed(st.session_state.posts):
+            st.markdown(f"**{name}:** {message}")
+            if st.button(f"👍 {st.session_state.upvotes[post_id]}", key=f"upvote_{post_id}"):
+                st.session_state.upvotes[post_id] += 1
+            st.markdown("---")
+
+def personality_quiz():
+    st.title("🩺 PCOS Lifestyle Risk Assessment")
+    st.markdown("#### Answer these questions to assess your risk level.")
+    
+    questions = {
+        "How often do you exercise?": {"Daily": 0, "3-5 times a week": 10, "1-2 times a week": 20, "Rarely": 30},
+        "How would you rate your diet?": {"Excellent": 0, "Good": 10, "Average": 20, "Poor": 30},
+        "Do you have irregular menstrual cycles?": {"Never": 0, "Occasionally": 10, "Often": 20, "Always": 30},
+        "How stressed do you feel daily?": {"Not at all": 0, "Mildly": 10, "Moderately": 20, "Highly stressed": 30},
+        "How many hours of sleep do you get per night?": {"More than 8": 0, "7-8 hours": 10, "5-6 hours": 20, "Less than 5": 30}
+    }
+    
+    score = 0
+    for question, options in questions.items():
+        answer = st.radio(question, list(options.keys()), index=0)
+        score += options[answer]
+        st.progress(score // (len(questions) * 3))
+        time.sleep(0.3)
+    
+    return score
+
+def get_recommendations(score):
+    if score < 40:
+        return "✅ You're doing great! Keep maintaining a balanced lifestyle."
+    elif score < 70:
+        return "⚠️ Consider improving your diet and exercise habits to lower risk."
+    else:
+        return "🚨 High risk detected! Consult a healthcare provider and adopt healthier habits."
+
+def get_personalized_plan(score):
+    if score < 40:
+        return "🥗 Healthy Diet: Continue balanced meals with fruits, veggies, and lean proteins.\n🏋️‍♀️ Exercise: Maintain your routine with 30 min daily workouts."
+    elif score < 70:
+        return "🥗 Diet Tip: Reduce processed foods and add more fiber-rich meals.\n🏋️‍♀️ Exercise: Try strength training and yoga for better hormone balance."
+    else:
+        return "🚨 High Risk Alert: \n🥗 Focus on low-glycemic foods, whole grains, and healthy fats.\n🏋️‍♀️ Regular Exercise: Daily 30-45 min workouts with cardio and strength training recommended."
+
+def get_motivational_message():
+    messages = [
+        "🌟 Every step towards a healthier you is a victory!",
+        "🏆 Small changes today lead to a healthier tomorrow!",
+        "💖 Your health matters—take care of yourself!",
+        "🔥 Keep pushing forward, your body will thank you!"
+    ]
+    return random.choice(messages)
+
+def main():
+    score = personality_quiz()
+    st.subheader(f"📊 Your PCOS Risk Score: **{score}**")
+    st.plotly_chart(risk_meter(score))
+    
+    st.markdown(f"### 💡 {get_recommendations(score)}")
+    st.markdown(f"### 📅 Personalized Diet & Exercise Plan:\n{get_personalized_plan(score)}")
+    st.success(get_motivational_message())
+    
+    if score < 40:
+        st.balloons()
+    elif score < 70:
+        st.snow()
+    else:
+        st.warning("⚠️ Consider lifestyle changes and consult a doctor!")
+        st.error("🚑 Immediate action is recommended!")
+    
+    if st.button("🎡 Spin the Wheel for a Health Tip!"):
+        st.write(spin_the_wheel())
+    
+    st.markdown("---")
+    community_forum()
+    
+if __name__ == "__main__":
+    main()
