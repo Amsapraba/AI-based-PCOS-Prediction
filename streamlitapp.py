@@ -1,67 +1,58 @@
 import streamlit as st
-import random
 
 def main():
     st.set_page_config(page_title='PCOS Prediction Dashboard', layout='wide')
     
+    # Title and Team Information
+    st.title("AI-based Early Detection and Prediction of Poly Cystic Ovary Syndrome (PCOS)")
+    st.write("### Amsapraba A P (Team Leader), Akshaya A, Kanaga Durga E, Srimathi P, Sam V George (MENTOR)")
+    st.write("#### St. Joseph’s College of Engineering, Chennai.")
+    st.write("**Team Code: S179**")
+    
     # Sidebar Navigation
-    menu = ['Home', 'Games', 'Quiz', 'Health Condition', 'Symptoms', 'Causes', 'Preventive Measures']
+    menu = ['Home', 'Symptoms', 'Causes', 'Preventive Measures', 'Health Condition', 'Quiz', 'Games']
     choice = st.sidebar.radio("Navigation", menu)
     
-    # Page Layouts
     if choice == 'Home':
-        st.title("Welcome to PCOS Prediction Dashboard")
-        st.write("🌸 Empower yourself with knowledge about PCOS and take control of your health.")
-        st.write("🔍 Explore insightful resources, interactive tools, and expert guidance.")
-        st.write("🎯 Our mission is to spread awareness and provide actionable insights.")
-        st.write("💡 Stay informed, stay healthy, and embrace a proactive approach to well-being.")
-        st.write("🚀 Let's embark on this journey towards better health together!")
+        st.subheader("Welcome to the PCOS Prediction Dashboard")
+        st.write("🔍 Explore insights and tools for early detection and management of PCOS.")
+        st.write("📊 Utilize AI-driven predictions for proactive healthcare decisions.")
+        st.write("💡 Stay informed, stay healthy!")
     
     elif choice == 'Symptoms':
-        st.title("⚠️ Symptoms of PCOS")
-        st.write("- 📌 **Irregular menstrual cycles**")
-        st.write("- 📌 **Excessive hair growth (hirsutism)**")
-        st.write("- 📌 **Acne and oily skin**")
-        st.write("- 📌 **Weight gain and difficulty losing weight**")
-        st.write("- 📌 **Thinning hair or hair loss on the scalp**")
+        st.subheader("⚠️ Symptoms of PCOS")
+        st.write("- 📌 Irregular menstrual cycles")
+        st.write("- 📌 Excessive hair growth (hirsutism)")
+        st.write("- 📌 Acne and oily skin")
+        st.write("- 📌 Weight gain and difficulty losing weight")
+        st.write("- 📌 Thinning hair or hair loss on the scalp")
     
     elif choice == 'Causes':
-        st.title("🧐 Causes of PCOS")
-        st.write("- 🔬 **Insulin resistance** - Reduces the body's ability to use insulin effectively.")
-        st.write("- 🏋️‍♀️ **Excess androgen production** - Leads to symptoms like excessive hair growth and acne.")
-        st.write("- 🧬 **Genetic factors** - A family history of PCOS may increase the likelihood of developing the condition.")
-        st.write("- 🔥 **Chronic inflammation** - Linked to higher androgen levels and insulin resistance.")
+        st.subheader("🧐 Causes of PCOS")
+        st.write("- 🔬 Insulin resistance leading to increased blood sugar levels.")
+        st.write("- 🏋️‍♀️ Excess androgen production causing hormonal imbalances.")
+        st.write("- 🧬 Genetic factors increasing susceptibility to PCOS.")
+        st.write("- 🔥 Chronic inflammation linked to insulin resistance and metabolic issues.")
     
     elif choice == 'Preventive Measures':
-        st.title("🛡️ Preventive Health Measures for PCOS")
-        st.write("- 🥗 **Maintain a healthy diet** - Consume whole foods, fiber-rich meals, and avoid processed sugars.")
-        st.write("- 🏃‍♀️ **Engage in regular physical activity** - Exercise helps improve insulin sensitivity and manage symptoms.")
-        st.write("- 🧘‍♀️ **Manage stress effectively** - Mindfulness, yoga, and relaxation techniques can help balance hormones.")
-        st.write("- 😴 **Ensure adequate sleep** - Maintain a consistent sleep schedule to regulate hormonal balance.")
-        st.write("- 🩺 **Consult a healthcare professional** - Early detection and proactive management can prevent complications.")
+        st.subheader("🛡️ Preventive Health Measures for PCOS")
+        st.write("- 🥗 Maintain a healthy diet rich in whole foods and low in processed sugars.")
+        st.write("- 🏃‍♀️ Engage in regular physical activity to improve insulin sensitivity.")
+        st.write("- 🧘‍♀️ Manage stress through mindfulness, yoga, and relaxation techniques.")
+        st.write("- 😴 Ensure adequate sleep to maintain hormonal balance.")
+        st.write("- 🩺 Consult healthcare professionals for early detection and proactive management.")
+    
+    elif choice == 'Health Condition':
+        st.subheader("🩺 Check Your Health Condition")
+        st.write("Assess your risk and take steps towards a healthier lifestyle.")
+    
+    elif choice == 'Quiz':
+        st.subheader("🧠 PCOS Knowledge Quiz")
+        st.write("Test your understanding of PCOS and related health aspects.")
     
     elif choice == 'Games':
-        st.title("Interactive Games")
-        st.write("🎮 Engage with fun and educational games to test your knowledge about PCOS.")
-        
-        game_choice = st.selectbox("Choose a Game", ["MCQ Challenge", "Match the Symptoms", "Bubble Selection"])
-        
-        if game_choice == "MCQ Challenge":
-            st.write("📝 Answer the multiple-choice questions correctly to earn points!")
-            questions = [
-                ("What hormone is typically elevated in PCOS?", ["Estrogen", "Progesterone", "Testosterone", "Insulin"], "Testosterone"),
-                ("Which lifestyle change can help manage PCOS symptoms?", ["Eating more sugar", "Exercising regularly", "Skipping meals", "Sleeping less"], "Exercising regularly")
-            ]
-            score = 0
-            user_answers = {}
-            for i, (q, options, answer) in enumerate(questions):
-                user_answers[i] = st.radio(q, options, key=f"mcq_{i}")
-            if st.button("Submit Answers"):
-                for i, (_, _, answer) in enumerate(questions):
-                    st.write(f"✅ Correct Answer: {answer}")
-                    if user_answers[i] == answer:
-                        score += 1
-                st.write(f"✅ Your Score: {score}/{len(questions)}")
+        st.subheader("🎮 Fun and Interactive Games")
+        st.write("Learn more about PCOS in an engaging way!")
     
 if __name__ == "__main__":
     main()
