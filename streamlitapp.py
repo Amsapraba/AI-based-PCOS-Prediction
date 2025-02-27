@@ -1,10 +1,11 @@
 import streamlit as st
+import pandas as pd
 
 def main():
     st.set_page_config(page_title='PCOS Prediction Dashboard', layout='wide')
     
     # Sidebar Navigation
-    menu = ['Home', 'Symptoms', 'Causes', 'Preventive Measures', 'Health Condition', 'Quiz', 'Games']
+    menu = ['Home', 'Symptoms', 'Causes', 'Preventive Measures', 'Health Condition', 'Quiz', 'Games', 'Upload & View Data']
     choice = st.sidebar.radio("Navigation", menu)
     
     if choice == 'Home':
@@ -51,6 +52,15 @@ def main():
     elif choice == 'Games':
         st.subheader("🎮 Fun and Interactive Games")
         st.write("Learn more about PCOS in an engaging way!")
+    
+    elif choice == 'Upload & View Data':
+        st.subheader("📂 Upload and View PCOS Dataset")
+        uploaded_file = st.file_uploader("Upload a CSV file", type=['csv'])
+        
+        if uploaded_file is not None:
+            df = pd.read_csv(uploaded_file)
+            st.write("### Uploaded Data")
+            st.dataframe(df)
     
 if __name__ == "__main__":
     main()
